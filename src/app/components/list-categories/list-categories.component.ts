@@ -4,6 +4,7 @@ import {CategoryService} from "../../services/category.service";
 import {first, take} from "rxjs";
 import {NzTableQueryParams} from "ng-zorro-antd/table";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {NzModalService} from "ng-zorro-antd/modal";
 @Component({
   selector: 'app-list-categories',
   templateUrl: './list-categories.component.html',
@@ -24,7 +25,8 @@ export class ListCategoriesComponent implements OnInit{
   selectedCategoryId: string = '';
   categoryForm: FormGroup;
   constructor(private categoriesService: CategoryService,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              private modal: NzModalService) {
     this.categoryForm = this.fb.group({
       id: [''],
       name: ['', Validators.required],
@@ -67,13 +69,25 @@ export class ListCategoriesComponent implements OnInit{
   }
 
   deleteCategoryById(id: string){
-    this.categoriesService.deleteCategoriesById(id).subscribe(response=>{
-      if(response['success']===true){
-        this.categoriesList = this.categoriesList.filter(cat => cat.id !== id);
-      }else{
-        alert("Delete error");
-      }
-    })
+    this.modal.confirm({
+      nzTitle: 'Are you sure you want to delete this category?',
+      nzContent: '',
+      nzOkText: 'Yes',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzOnOk: () => {
+        console.log("hereeeee");
+        this.categoriesService.deleteCategoriesById(id).subscribe(response=>{
+          if(response['success']===true){
+            this.categoriesList = this.categoriesList.filter(cat => cat.id !== id);
+          }else{
+            alert("Delete error");
+          }
+        });
+      },
+      nzCancelText: 'No',
+      nzOnCancel: () => {}
+    });
   }
 
   showUpdateModal(){

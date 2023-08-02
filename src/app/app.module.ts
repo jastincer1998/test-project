@@ -15,6 +15,8 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { ListCategoriesComponent } from './components/list-categories/list-categories.component';
 import { ListItemsComponent } from './components/list-items/list-items.component';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
 
 registerLocaleData(en);
 @NgModule({
@@ -31,7 +33,9 @@ registerLocaleData(en);
     HttpClientModule,
     BrowserAnimationsModule,
     NzLayoutModule,
-    NzMenuModule
+    NzMenuModule,
+    NzTableModule,
+    NzDividerModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US }

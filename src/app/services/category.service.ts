@@ -18,4 +18,8 @@ export class CategoryService {
   deleteCategoriesById(id: string): Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/Category/${id}/Remove`, {});
   }
+
+  updateCategory(id: string, body: any): Observable<any> {
+    return this.http.put<any>(`${environment.apiUrl}/Category/${id}`, body);
+  }
 }

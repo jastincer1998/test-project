@@ -3,6 +3,7 @@ import {Category} from "../../models/Category";
 import {CategoryService} from "../../services/category.service";
 import {first, take} from "rxjs";
 import {NzTableQueryParams} from "ng-zorro-antd/table";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 @Component({
   selector: 'app-list-categories',
   templateUrl: './list-categories.component.html',
@@ -17,7 +18,18 @@ export class ListCategoriesComponent implements OnInit{
   currentPageIndex = 0;
 
   requestBody: any = {}
-  constructor(private categoriesService: CategoryService) {
+
+  isVisible = false;
+
+  selectedCategoryId: string = '';
+  categoryForm: FormGroup;
+  constructor(private categoriesService: CategoryService,
+              private fb: FormBuilder) {
+    this.categoryForm = this.fb.group({
+      id: [''],
+      name: ['', Validators.required],
+      description: ['']
+    });
   }
 
   ngOnInit(): void {
@@ -62,5 +74,35 @@ export class ListCategoriesComponent implements OnInit{
         alert("Delete error");
       }
     })
+  }
+
+  showUpdateModal(){
+    this.isVisible = true;
+  }
+
+  handleCancel(){
+    this.isVisible = false;
+  }
+
+  handleOk(){
+    this.isVisible = false;
+  }
+  editCategory(id: string){
+    const selectedCategory = this.categoriesList.find(cat => cat.id === id);
+    this.categoryForm.patchValue(selectedCategory!);
+    this.isVisible = true;
+  }
+
+  updateCategory(){
+    const category = this.categoryForm.value;
+    this.isVisible = false;
+    this.categoriesService.updateCategory(category.id, category).subscribe(response=>{
+      if(response['success']==true){
+        this.fetchData();
+      }
+      else{
+        alert("Update error");
+      }
+    });
   }
 }

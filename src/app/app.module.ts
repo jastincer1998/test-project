@@ -13,11 +13,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { ListCategoriesComponent } from './components/list-categories/list-categories.component';
+import { ListItemsComponent } from './components/list-items/list-items.component';
 
 registerLocaleData(en);
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ListCategoriesComponent,
+    ListItemsComponent
   ],
   imports: [
     BrowserModule,

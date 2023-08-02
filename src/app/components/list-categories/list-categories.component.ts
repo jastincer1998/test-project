@@ -53,4 +53,14 @@ export class ListCategoriesComponent implements OnInit{
       this.categoriesList = response['items'];
     })
   }
+
+  deleteCategoryById(id: string){
+    this.categoriesService.deleteCategoriesById(id).subscribe(response=>{
+      if(response['success']===true){
+        this.categoriesList = this.categoriesList.filter(cat => cat.id !== id);
+      }else{
+        alert("Delete error");
+      }
+    })
+  }
 }

@@ -22,7 +22,7 @@
       <button nz-button nzType="primary">Edit</button>
     </td>
     <td>
-      <button nz-button nzType="primary" nzDanger>Delete</button>
+      <button nz-button nzType="primary" nzDanger (click)="deleteCategoryById(data.id)">Delete</button>
     </td>
   </tr>
   </tbody>

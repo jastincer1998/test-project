@@ -1,1 +1,62 @@
-<p>list-items works!</p>
+<div class="table-container">
+  <nz-table
+    #basicTable [nzData]="itemList"
+    nzShowPagination
+    nzShowSizeChanger
+    [nzLoading]="loading"
+    [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="currentPageIndex+1"
+    (nzPageIndexChange)="onPageChange($event)" (nzPageSizeChange)="onPageSizeChange($event)"
+    [nzFrontPagination]="false">
+    <thead>
+    <tr>
+      <th>Code</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Category</th>
+
+      <th>Edit</th>
+      <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of basicTable.data">
+      <td>{{ data.code }}</td>
+      <td>{{ data.name }}</td>
+      <td>{{ data.description }}</td>
+      <td>{{ data.category }}</td>
+      <td>
+        <button nz-button nzType="primary" (click)="editItem(data.id)">Edit</button>
+      </td>
+      <td>
+        <button nz-button nzType="primary" nzDanger (click)="deleteItemById(data.id)">Delete</button>
+      </td>
+    </tr>
+    </tbody>
+  </nz-table>
+
+  <nz-modal [(nzVisible)]="isVisible" nzTitle="Update Item" [nzFooter]="null">
+    <ng-container *nzModalContent>
+      <form [formGroup]="itemForm">
+        <input type="hidden" formControlName="id">
+        <nz-form-item>
+          <input nz-input type="text" formControlName="code">
+        </nz-form-item>
+        <nz-form-item>
+          <input nz-input type="text" formControlName="name">
+        </nz-form-item>
+        <nz-form-item>
+          <textarea nz-input rows="4" type="text" formControlName="description"></textarea>
+        </nz-form-item>
+        <nz-form-item>
+          <input nz-input type="number" formControlName="defaultPrice">
+        </nz-form-item>
+        <nz-form-item>
+          <input nz-input type="number" formControlName="defaultCost">
+        </nz-form-item>
+        <button nz-button nzType="primary" [disabled]="itemForm.invalid" (click)="updateItem()">Actualizar</button>
+        <button class="cancel-button" nz-button nzType="default" (click)="handleCancel()">Cancelar</button>
+      </form>
+    </ng-container>
+  </nz-modal>
+
+</div>

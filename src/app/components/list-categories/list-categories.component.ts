@@ -115,7 +115,10 @@ export class ListCategoriesComponent implements OnInit{
         this.fetchData();
       }
       else{
-        alert("Update error");
+        this.modal.error({
+          nzTitle: 'Update error',
+          nzContent: `${response['message']}`
+        });
       }
     });
   }

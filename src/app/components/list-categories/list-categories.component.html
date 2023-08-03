@@ -20,10 +20,10 @@
       <td>{{ data.name }}</td>
       <td>{{ data.description }}</td>
       <td>
-        <button nz-button nzType="primary" (click)="editCategory(data.id)">Edit</button>
+        <button [nzShape]="'round'" nz-button nzType="primary" (click)="editCategory(data.id)">Edit</button>
       </td>
       <td>
-        <button nz-button nzType="primary" nzDanger (click)="deleteCategoryById(data.id)">Delete</button>
+        <button [nzShape]="'round'" nz-button nzType="primary" nzDanger (click)="deleteCategoryById(data.id)">Delete</button>
       </td>
     </tr>
     </tbody>

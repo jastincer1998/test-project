@@ -6,3 +6,14 @@
   padding: 40px;
 }
 
+.btn-create-category{
+  margin-top: 40px;
+}
+
+nz-select {
+  width: 200px;
+}
+
+.select-category{
+  margin-bottom: 30px;
+}

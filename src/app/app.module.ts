@@ -20,6 +20,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 registerLocaleData(en);
 @NgModule({
@@ -42,7 +43,8 @@ registerLocaleData(en);
     NzModalModule,
     NzFormModule,
     ReactiveFormsModule,
-    NzInputModule
+    NzInputModule,
+    NzSelectModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US }

@@ -25,15 +25,15 @@
       <td>{{ data.description }}</td>
       <td>{{ data.category }}</td>
       <td>
-        <button nz-button nzType="primary" (click)="editItem(data.id)">Edit</button>
+        <button [nzShape]="'round'" nz-button nzType="primary" (click)="editItem(data.id)">Edit</button>
       </td>
       <td>
-        <button nz-button nzType="primary" nzDanger (click)="deleteItemById(data.id)">Delete</button>
+        <button [nzShape]="'round'" nz-button nzType="primary" nzDanger (click)="deleteItemById(data.id)">Delete</button>
       </td>
     </tr>
     </tbody>
   </nz-table>
-
+  <button class="btn-create-category" nz-button nzType="primary" (click)="showCreateModal()">New Item</button>
   <nz-modal [(nzVisible)]="isVisible" nzTitle="Update Item" [nzFooter]="null">
     <ng-container *nzModalContent>
       <form [formGroup]="itemForm">
@@ -59,4 +59,31 @@
     </ng-container>
   </nz-modal>
 
+  <nz-modal [(nzVisible)]="isVisibleCreate" nzTitle="Create Item" [nzFooter]="null">
+    <ng-container *nzModalContent>
+      <nz-select class="select-category" nzShowSearch nzPlaceHolder="Select a category" [(ngModel)]="selectedCategory">
+        <nz-option *ngFor="let category of allCategories" [nzLabel]="category.name" [nzValue]="category.id"></nz-option>
+      </nz-select>
+      <form [formGroup]="itemForm">
+        <input type="hidden" formControlName="id">
+        <nz-form-item>
+          <input placeholder="Code" nz-input type="text" formControlName="code">
+        </nz-form-item>
+        <nz-form-item>
+          <input placeholder="Name" nz-input type="text" formControlName="name">
+        </nz-form-item>
+        <nz-form-item>
+          <textarea placeholder="Description" nz-input rows="4" type="text" formControlName="description"></textarea>
+        </nz-form-item>
+        <nz-form-item>
+          <input nz-input type="number" formControlName="defaultPrice">
+        </nz-form-item>
+        <nz-form-item>
+          <input nz-input type="number" formControlName="defaultCost">
+        </nz-form-item>
+        <button nz-button nzType="primary" [disabled]="itemForm.invalid" (click)="createItem()">Crear</button>
+        <button class="cancel-button" nz-button nzType="default" (click)="handleCancel()">Cancelar</button>
+      </form>
+    </ng-container>
+  </nz-modal>
 </div>

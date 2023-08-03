@@ -77,12 +77,14 @@ export class ListCategoriesComponent implements OnInit{
       nzOkType: 'primary',
       nzOkDanger: true,
       nzOnOk: () => {
-        console.log("hereeeee");
         this.categoriesService.deleteCategoriesById(id).subscribe(response=>{
           if(response['success']===true){
             this.categoriesList = this.categoriesList.filter(cat => cat.id !== id);
           }else{
-            alert("Delete error");
+            this.modal.error({
+              nzTitle: 'Delete error',
+              nzContent: `${response['message']}`
+            });
           }
         });
       },
@@ -94,11 +96,7 @@ export class ListCategoriesComponent implements OnInit{
   handleCancel(){
     this.isVisibleUpdate = false;
     this.isVisibleCreate = false;
-    this.categoryForm = this.fb.group({
-      id: [''],
-      name: ['', Validators.required],
-      description: ['']
-    });
+    this.cleanForm();
   }
 
   editCategory(id: string){
@@ -113,22 +111,14 @@ export class ListCategoriesComponent implements OnInit{
     this.categoriesService.updateCategory(category.id, category).subscribe(response=>{
       if(response['success']==true){
         this.fetchData();
-        this.categoryForm = this.fb.group({
-          id: [''],
-          name: ['', Validators.required],
-          description: ['']
-        });
+        this.cleanForm();
       }
       else{
         this.modal.error({
           nzTitle: 'Update error',
           nzContent: `${response['message']}`
         });
-        this.categoryForm = this.fb.group({
-          id: [''],
-          name: ['', Validators.required],
-          description: ['']
-        });
+        this.cleanForm();
       }
     });
   }
@@ -138,28 +128,27 @@ export class ListCategoriesComponent implements OnInit{
   }
 
   createCategory(){
-    console.log("categfo: " + JSON.stringify(this.categoryForm.value, null, 2));
     this.categoriesService.createCategory(this.categoryForm.value).subscribe(response=>{
       if(response['success'] == true){
         this.fetchData();
         this.isVisibleCreate = false;
-        this.categoryForm = this.fb.group({
-          id: [''],
-          name: ['', Validators.required],
-          description: ['']
-        });
+        this.cleanForm();
       }
       else{
         this.modal.error({
           nzTitle: 'Create error',
           nzContent: `${response['message']}`
         });
-        this.categoryForm = this.fb.group({
-          id: [''],
-          name: ['', Validators.required],
-          description: ['']
-        });
+        this.cleanForm();
       }
+    });
+  }
+
+  cleanForm(){
+    this.categoryForm = this.fb.group({
+      id: [''],
+      name: ['', Validators.required],
+      description: ['']
     });
   }
 }

@@ -22,10 +22,13 @@ export class ListItemsComponent {
   requestBody: any = {}
 
   isVisible = false;
-
-  selectedCategoryId: string = '';
+  isVisibleCreate = false;
   itemForm: FormGroup;
+  selectedCategory: any;
+
+  allCategories: Category[] = [];
   constructor(private itemService: ItemService,
+              private categoryService: CategoryService,
               private fb: FormBuilder,
               private modal: NzModalService) {
     this.itemForm = this.fb.group({
@@ -35,6 +38,14 @@ export class ListItemsComponent {
       description: [''],
       defaultPrice: [0],
       defaultCost: [0]
+    });
+    const requestBody = {
+      "pageNo": 0,
+      "pageSize": 2000,
+      "filters": null
+    }
+    this.categoryService.getCategories(requestBody).subscribe(response=>{
+      this.allCategories = response['items'];
     });
   }
 
@@ -80,7 +91,10 @@ export class ListItemsComponent {
           if(response['success']===true){
             this.itemList = this.itemList.filter(it => it.id !== id);
           }else{
-            alert("Delete error");
+            this.modal.error({
+              nzTitle: 'Delete error',
+              nzContent: `${response['message']}`
+            });
           }
         });
       },
@@ -89,23 +103,22 @@ export class ListItemsComponent {
     });
   }
 
-  showUpdateModal(){
-    this.isVisible = true;
+  showCreateModal(){
+    this.isVisibleCreate = true;
   }
-
   handleCancel(){
     this.isVisible = false;
+    this.isVisibleCreate = false;
+    this.cleanForm();
   }
 
-  handleOk(){
-    this.isVisible = false;
-  }
   editItem(id: string){
     this.itemService.getItemsById(id).subscribe(response=>{
       let selectedItem = response['data'];
       this.itemForm.patchValue(selectedItem!);
       this.isVisible = true;
     });
+    this.cleanForm();
   }
 
   updateItem(){
@@ -115,19 +128,63 @@ export class ListItemsComponent {
       name: item.name,
       description: item.description,
       defaultPrice: item.defaultPrice,
-      defaultCost: item.defaultCost
+      defaultCost: item.defaultCost,
     }
     this.isVisible = false;
     this.itemService.updateItem(item.id, body).subscribe(response=>{
       if(response['success']==true){
         this.fetchData();
+        this.cleanForm();
       }
       else{
         this.modal.error({
           nzTitle: 'Update error',
           nzContent: `${response['message']}`
         });
+        this.cleanForm();
       }
+    });
+  }
+
+  createItem(){
+    const item = this.itemForm.value;
+    const body = {
+      code: item.code,
+      name: item.name,
+      description: item.description,
+      defaultPrice: item.defaultPrice,
+      defaultCost: item.defaultCost,
+      categoryId: this.selectedCategory
+    }
+    this.itemService.createItem(body).subscribe(response=>{
+      if(response['success'] == true){
+        this.fetchData();
+        this.isVisibleCreate = false;
+        this.cleanForm();
+        this.modal.success({
+          nzTitle: 'Item successfully created'
+        })
+        this.cleanForm();
+      }
+      else{
+        this.modal.error({
+          nzTitle: 'Create error',
+          nzContent: `${response['message']}`
+        });
+        this.isVisibleCreate = false;
+        this.cleanForm();
+      }
+    });
+  }
+
+  cleanForm(){
+    this.itemForm = this.fb.group({
+      id: [''],
+      code: ['', Validators.required],
+      name: ['', Validators.required],
+      description: [''],
+      defaultPrice: [0],
+      defaultCost: [0]
     });
   }
 }

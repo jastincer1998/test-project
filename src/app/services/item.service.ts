@@ -14,6 +14,9 @@ export class ItemService {
     return this.http.post<any>(`${environment.apiUrl}/Item/Search`, requestBody);
   }
 
+  createItem(requestBody: any): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/Item`, requestBody);
+  }
   deleteItemById(id: string): Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/Item/${id}/Remove`, {});
   }

@@ -22,13 +22,16 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzResultModule } from 'ng-zorro-antd/result';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 registerLocaleData(en);
 @NgModule({
   declarations: [
     AppComponent,
     ListCategoriesComponent,
-    ListItemsComponent
+    ListItemsComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +49,8 @@ registerLocaleData(en);
     ReactiveFormsModule,
     NzInputModule,
     NzSelectModule,
-    NzIconModule
+    NzIconModule,
+    NzResultModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US }

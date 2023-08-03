@@ -26,11 +26,13 @@ export class ListItemsComponent {
   itemForm: FormGroup;
   selectedCategory: any;
 
+  selected: any;
   allCategories: Category[] = [];
   constructor(private itemService: ItemService,
               private categoryService: CategoryService,
               private fb: FormBuilder,
-              private modal: NzModalService) {
+              private modal: NzModalService
+              ) {
     this.itemForm = this.fb.group({
       id: [''],
       code: ['', Validators.required],
@@ -41,11 +43,12 @@ export class ListItemsComponent {
     });
     const requestBody = {
       "pageNo": 0,
-      "pageSize": 2000,
+      "pageSize": 100000,
       "filters": null
     }
     this.categoryService.getCategories(requestBody).subscribe(response=>{
       this.allCategories = response['items'];
+      console.log("item list: " + JSON.stringify(response, null, 2));
     });
   }
 
@@ -58,6 +61,7 @@ export class ListItemsComponent {
     this.itemService.getAllItems(this.requestBody).subscribe(response=>{
       this.loading = false;
       this.itemList = response['items'];
+      localStorage.setItem("itemList", JSON.stringify(this.itemList));
       this.total = response['total'];
     })
   }
@@ -76,6 +80,7 @@ export class ListItemsComponent {
     this.itemService.getAllItems(this.requestBody).subscribe(response=>{
       this.loading = false;
       this.itemList = response['items'];
+      localStorage.setItem("itemList", JSON.stringify(this.itemList));
     })
   }
 
@@ -177,6 +182,16 @@ export class ListItemsComponent {
     });
   }
 
+  onSelectionChange(){
+    if(this.selected !== null){
+      this.itemList = JSON.parse(localStorage.getItem("itemList")!);
+      const categorySelected = this.allCategories.find(cat=>cat.id===this.selected);
+      this.itemList = this.itemList.filter((item)=>item.category === categorySelected!.name);
+      this.itemList = this.itemList.length !== 0 ? this.itemList : JSON.parse(localStorage.getItem("itemList")!);
+    }else{
+      this.itemList = JSON.parse(localStorage.getItem("itemList")!);
+    }
+  }
   cleanForm(){
     this.itemForm = this.fb.group({
       id: [''],

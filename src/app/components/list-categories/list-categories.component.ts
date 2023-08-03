@@ -45,7 +45,6 @@ export class ListCategoriesComponent implements OnInit{
       this.loading = false;
       this.categoriesList = response['items'];
       this.total = response['total'];
-      console.log("totalc: " + this.total);
     })
   }
 

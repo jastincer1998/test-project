@@ -1,3 +1,10 @@
+<div class="filter">
+  <h3>Filter by Category</h3>
+  <nz-select class="select-category" [nzAllowClear] = "true" nzShowSearch nzPlaceHolder="Select a category" [(ngModel)]="selected" (ngModelChange)="onSelectionChange()">
+    <nz-option *ngFor="let category of allCategories" [nzLabel]="category.name" [nzValue]="category.id"></nz-option>
+  </nz-select>
+</div>
+
 <div class="table-container">
   <nz-table
     #basicTable [nzData]="itemList"
@@ -25,10 +32,10 @@
       <td>{{ data.description }}</td>
       <td>{{ data.category }}</td>
       <td>
-        <button [nzShape]="'round'" nz-button nzType="primary" (click)="editItem(data.id)">Edit</button>
+        <button [nzShape]="'round'" nz-button nzType="primary" (click)="editItem(data.id)"><span nz-icon nzType="edit" nzTheme="outline"></span></button>
       </td>
       <td>
-        <button [nzShape]="'round'" nz-button nzType="primary" nzDanger (click)="deleteItemById(data.id)">Delete</button>
+        <button [nzShape]="'round'" nz-button nzType="primary" nzDanger (click)="deleteItemById(data.id)"><span nz-icon nzType="delete" nzTheme="outline"></span></button>
       </td>
     </tr>
     </tbody>

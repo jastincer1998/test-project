@@ -4,6 +4,7 @@ import {ListCategoriesComponent} from "./components/list-categories/list-categor
 import {ListItemsComponent} from "./components/list-items/list-items.component";
 
 const routes: Routes = [
+  { path: '', redirectTo: 'categories', pathMatch: 'full' },
   { path: 'categories', component: ListCategoriesComponent },
   { path: 'items', component: ListItemsComponent },
 ];

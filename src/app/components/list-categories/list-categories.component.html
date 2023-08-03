@@ -28,8 +28,10 @@
     </tr>
     </tbody>
   </nz-table>
+  <button class="btn-create-category" nz-button nzType="primary" (click)="showCreateModal()">New Category</button>
 
-  <nz-modal [(nzVisible)]="isVisible" nzTitle="Update Category" [nzFooter]="null">
+
+  <nz-modal [(nzVisible)]="isVisibleUpdate" nzTitle="Update Category" [nzFooter]="null">
     <ng-container *nzModalContent>
       <form [formGroup]="categoryForm">
         <input type="hidden" formControlName="id">
@@ -40,6 +42,22 @@
           <textarea nz-input rows="4" type="text" formControlName="description"></textarea>
         </nz-form-item>
         <button nz-button nzType="primary" [disabled]="categoryForm.invalid" (click)="updateCategory()">Actualizar</button>
+        <button class="cancel-button" nz-button nzType="default" (click)="handleCancel()">Cancelar</button>
+      </form>
+    </ng-container>
+  </nz-modal>
+
+  <nz-modal [(nzVisible)]="isVisibleCreate" nzTitle="Create Category" [nzFooter]="null">
+    <ng-container *nzModalContent>
+      <form [formGroup]="categoryForm">
+        <input type="hidden" formControlName="id">
+        <nz-form-item>
+          <input nz-input type="text" formControlName="name">
+        </nz-form-item>
+        <nz-form-item>
+          <textarea nz-input rows="4" type="text" formControlName="description"></textarea>
+        </nz-form-item>
+        <button nz-button nzType="primary" [disabled]="categoryForm.invalid" (click)="createCategory()">Create</button>
         <button class="cancel-button" nz-button nzType="default" (click)="handleCancel()">Cancelar</button>
       </form>
     </ng-container>

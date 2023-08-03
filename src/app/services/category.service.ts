@@ -15,6 +15,10 @@ export class CategoryService {
     return this.http.post<any>(`${environment.apiUrl}/Category/Search`, requestBody);
   }
 
+  createCategory(requestBody: any): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/Category`, requestBody);
+  }
+
   deleteCategoriesById(id: string): Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/Category/${id}/Remove`, {});
   }

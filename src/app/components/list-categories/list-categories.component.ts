@@ -20,8 +20,9 @@ export class ListCategoriesComponent implements OnInit{
 
   requestBody: any = {}
 
-  isVisible = false;
+  isVisibleUpdate = false;
 
+  isVisibleCreate = false;
   selectedCategoryId: string = '';
   categoryForm: FormGroup;
   constructor(private categoriesService: CategoryService,
@@ -90,34 +91,73 @@ export class ListCategoriesComponent implements OnInit{
     });
   }
 
-  showUpdateModal(){
-    this.isVisible = true;
-  }
-
   handleCancel(){
-    this.isVisible = false;
+    this.isVisibleUpdate = false;
+    this.isVisibleCreate = false;
+    this.categoryForm = this.fb.group({
+      id: [''],
+      name: ['', Validators.required],
+      description: ['']
+    });
   }
 
-  handleOk(){
-    this.isVisible = false;
-  }
   editCategory(id: string){
     const selectedCategory = this.categoriesList.find(cat => cat.id === id);
     this.categoryForm.patchValue(selectedCategory!);
-    this.isVisible = true;
+    this.isVisibleUpdate = true;
   }
 
   updateCategory(){
     const category = this.categoryForm.value;
-    this.isVisible = false;
+    this.isVisibleUpdate = false;
     this.categoriesService.updateCategory(category.id, category).subscribe(response=>{
       if(response['success']==true){
         this.fetchData();
+        this.categoryForm = this.fb.group({
+          id: [''],
+          name: ['', Validators.required],
+          description: ['']
+        });
       }
       else{
         this.modal.error({
           nzTitle: 'Update error',
           nzContent: `${response['message']}`
+        });
+        this.categoryForm = this.fb.group({
+          id: [''],
+          name: ['', Validators.required],
+          description: ['']
+        });
+      }
+    });
+  }
+
+  showCreateModal(){
+    this.isVisibleCreate = true;
+  }
+
+  createCategory(){
+    console.log("categfo: " + JSON.stringify(this.categoryForm.value, null, 2));
+    this.categoriesService.createCategory(this.categoryForm.value).subscribe(response=>{
+      if(response['success'] == true){
+        this.fetchData();
+        this.isVisibleCreate = false;
+        this.categoryForm = this.fb.group({
+          id: [''],
+          name: ['', Validators.required],
+          description: ['']
+        });
+      }
+      else{
+        this.modal.error({
+          nzTitle: 'Create error',
+          nzContent: `${response['message']}`
+        });
+        this.categoryForm = this.fb.group({
+          id: [''],
+          name: ['', Validators.required],
+          description: ['']
         });
       }
     });

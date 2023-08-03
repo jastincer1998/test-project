@@ -5,6 +5,7 @@ import {CategoryService} from "../../services/category.service";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {ItemService} from "../../services/item.service";
 import {Item} from "../../models/Item";
+import {NzNotificationService} from "ng-zorro-antd/notification";
 
 @Component({
   selector: 'app-list-items',
@@ -34,7 +35,8 @@ export class ListItemsComponent {
   constructor(private itemService: ItemService,
               private categoryService: CategoryService,
               private fb: FormBuilder,
-              private modal: NzModalService
+              private modal: NzModalService,
+              private notification: NzNotificationService
               ) {
     this.itemForm = this.fb.group({
       id: [''],
@@ -97,6 +99,11 @@ export class ListItemsComponent {
         this.itemService.deleteItemById(id).subscribe(response=>{
           if(response['success']===true){
             this.itemList = this.itemList.filter(it => it.id !== id);
+            this.notification.create(
+              'success',
+              'Success',
+              'Item successfully deleted'
+            );
           }else{
             this.modal.error({
               nzTitle: 'Delete error',
@@ -155,11 +162,16 @@ export class ListItemsComponent {
       defaultPrice: item.defaultPrice,
       defaultCost: item.defaultCost,
     }
-    this.isVisible = false;
     this.itemService.updateItem(item.id, body).subscribe(response=>{
+      this.isVisible = false;
       if(response['success']==true){
         this.fetchData();
         this.cleanForm();
+        this.notification.create(
+          'success',
+          'Success',
+          'Item successfully updated'
+        );
       }
       else{
         this.modal.error({
@@ -192,9 +204,11 @@ export class ListItemsComponent {
           this.fetchData();
           this.isVisibleCreate = false;
           this.cleanForm();
-          this.modal.success({
-            nzTitle: 'Item successfully created'
-          })
+          this.notification.create(
+            'success',
+            'Success',
+            'Item successfully created'
+          );
           this.cleanForm();
         }
         else{
@@ -214,7 +228,6 @@ export class ListItemsComponent {
       this.itemList = JSON.parse(localStorage.getItem("itemList")!);
       const categorySelected = this.allCategories.find(cat=>cat.id===this.selected);
       this.itemList = this.itemList.filter((item)=>item.category === categorySelected!.name);
-      this.itemList = this.itemList.length !== 0 ? this.itemList : JSON.parse(localStorage.getItem("itemList")!);
     }else{
       this.itemList = JSON.parse(localStorage.getItem("itemList")!);
     }

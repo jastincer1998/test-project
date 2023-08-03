@@ -3,6 +3,7 @@ import {Category} from "../../models/Category";
 import {CategoryService} from "../../services/category.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NzModalService} from "ng-zorro-antd/modal";
+import {NzNotificationService} from "ng-zorro-antd/notification";
 @Component({
   selector: 'app-list-categories',
   templateUrl: './list-categories.component.html',
@@ -25,7 +26,8 @@ export class ListCategoriesComponent implements OnInit{
   categoryForm: FormGroup;
   constructor(private categoriesService: CategoryService,
               private fb: FormBuilder,
-              private modal: NzModalService) {
+              private modal: NzModalService,
+              private notification: NzNotificationService) {
     this.categoryForm = this.fb.group({
       id: [''],
       name: ['', Validators.required],
@@ -74,6 +76,11 @@ export class ListCategoriesComponent implements OnInit{
         this.categoriesService.deleteCategoriesById(id).subscribe(response=>{
           if(response['success']===true){
             this.categoriesList = this.categoriesList.filter(cat => cat.id !== id);
+            this.notification.create(
+              'success',
+              'Success',
+              'Category successfully deleted'
+            );
           }else{
             this.modal.error({
               nzTitle: 'Delete error',
@@ -101,9 +108,14 @@ export class ListCategoriesComponent implements OnInit{
 
   updateCategory(){
     const category = this.categoryForm.value;
-    this.isVisibleUpdate = false;
     this.categoriesService.updateCategory(category.id, category).subscribe(response=>{
+      this.isVisibleUpdate = false;
       if(response['success']==true){
+        this.notification.create(
+          'success',
+          'Success',
+          'Category successfully updated'
+        );
         this.fetchData();
         this.cleanForm();
       }
@@ -127,6 +139,11 @@ export class ListCategoriesComponent implements OnInit{
         this.fetchData();
         this.isVisibleCreate = false;
         this.cleanForm();
+        this.notification.create(
+          'success',
+          'Success',
+          'Category successfully created'
+        );
       }
       else{
         this.modal.error({

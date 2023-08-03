@@ -24,6 +24,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { NzNotificationModule } from 'ng-zorro-antd/notification';
 
 registerLocaleData(en);
 @NgModule({
@@ -50,7 +51,8 @@ registerLocaleData(en);
     NzInputModule,
     NzSelectModule,
     NzIconModule,
-    NzResultModule
+    NzResultModule,
+    NzNotificationModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US }

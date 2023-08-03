@@ -21,3 +21,15 @@ nz-select {
   margin-left: 40px;
   margin-top: 40px;
 }
+.btn-details{
+  background-color: #5b2883;
+  border-color: #5b2883;
+}
+
+.item-info{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}

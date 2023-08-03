@@ -16,6 +16,7 @@
     [nzFrontPagination]="false">
     <thead>
     <tr>
+      <th>Details</th>
       <th>Code</th>
       <th>Name</th>
       <th>Description</th>
@@ -27,6 +28,7 @@
     </thead>
     <tbody>
     <tr *ngFor="let data of basicTable.data">
+      <td><button class="btn-details" [nzShape]="'round'" nz-button nzType="primary" (click)="getItemDetails(data.id)">Details</button></td>
       <td>{{ data.code }}</td>
       <td>{{ data.name }}</td>
       <td>{{ data.description }}</td>
@@ -46,10 +48,10 @@
       <form [formGroup]="itemForm">
         <input type="hidden" formControlName="id">
         <nz-form-item>
-          <input nz-input type="text" formControlName="code">
+          <input [disabled]="true" nz-input type="text" formControlName="code">
         </nz-form-item>
         <nz-form-item>
-          <input nz-input type="text" formControlName="name">
+          <input [disabled]="true" nz-input type="text" formControlName="name">
         </nz-form-item>
         <nz-form-item>
           <textarea nz-input rows="4" type="text" formControlName="description"></textarea>
@@ -60,8 +62,8 @@
         <nz-form-item>
           <input nz-input type="number" formControlName="defaultCost">
         </nz-form-item>
-        <button nz-button nzType="primary" [disabled]="itemForm.invalid" (click)="updateItem()">Actualizar</button>
-        <button class="cancel-button" nz-button nzType="default" (click)="handleCancel()">Cancelar</button>
+        <button nz-button nzType="primary" [disabled]="itemForm.invalid" (click)="updateItem()">Edit</button>
+        <button class="cancel-button" nz-button nzType="default" (click)="handleCancel()">Cancel</button>
       </form>
     </ng-container>
   </nz-modal>
@@ -83,14 +85,27 @@
           <textarea placeholder="Description" nz-input rows="4" type="text" formControlName="description"></textarea>
         </nz-form-item>
         <nz-form-item>
-          <input nz-input type="number" formControlName="defaultPrice">
+          <input placeholder="Default price" nz-input type="number" formControlName="defaultPrice">
         </nz-form-item>
         <nz-form-item>
-          <input nz-input type="number" formControlName="defaultCost">
+          <input placeholder="Default Cost" nz-input type="number" formControlName="defaultCost">
         </nz-form-item>
-        <button nz-button nzType="primary" [disabled]="itemForm.invalid" (click)="createItem()">Crear</button>
-        <button class="cancel-button" nz-button nzType="default" (click)="handleCancel()">Cancelar</button>
+        <button nz-button nzType="primary" [disabled]="itemForm.invalid" (click)="createItem()">Create</button>
+        <button class="cancel-button" nz-button nzType="default" (click)="handleCancel()">Cancel</button>
       </form>
+    </ng-container>
+  </nz-modal>
+
+  <nz-modal [(nzVisible)]="isVisibleDetails" nzTitle="Item Details" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <ng-container *nzModalContent>
+      <div *ngIf="itemDetails!==undefined" class="item-info">
+        <h1>{{itemDetails.name}}</h1>
+        <h3>Category: {{itemDetails.category}}</h3>
+        <h3>Code: {{itemDetails.code}}</h3>
+        <h3>Description: {{itemDetails.description}}</h3>
+        <h3>Default cost: {{itemDetails.defaultCost}}</h3>
+        <h3>Default price: {{itemDetails.defaultPrice}}</h3>
+      </div>
     </ng-container>
   </nz-modal>
 </div>

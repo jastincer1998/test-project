@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Category} from "../../models/Category";
 import {CategoryService} from "../../services/category.service";
-import {first, take} from "rxjs";
-import {NzTableQueryParams} from "ng-zorro-antd/table";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NzModalService} from "ng-zorro-antd/modal";
 @Component({
@@ -50,14 +48,11 @@ export class ListCategoriesComponent implements OnInit{
 
   onPageChange(event: number) {
     this.requestBody.pageNo = event -1;
-    console.log("catList: " + this.requestBody.pageNo);
     this.fetchData();
   }
 
   onPageSizeChange(event: number) {
     this.requestBody.pageSize = event;
-    console.log("catList from here: " + JSON.stringify(this.categoriesList, null, 2));
-
     this.fetchData();
   }
 

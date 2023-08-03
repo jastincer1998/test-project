@@ -13,6 +13,8 @@ import {Item} from "../../models/Item";
 })
 export class ListItemsComponent {
   itemList: Item[] = [];
+
+  itemDetails: Item | undefined;
   loading: boolean = true;
 
   total = 0;
@@ -23,6 +25,7 @@ export class ListItemsComponent {
 
   isVisible = false;
   isVisibleCreate = false;
+  isVisibleDetails = false;
   itemForm: FormGroup;
   selectedCategory: any;
 
@@ -38,8 +41,8 @@ export class ListItemsComponent {
       code: ['', Validators.required],
       name: ['', Validators.required],
       description: [''],
-      defaultPrice: [0],
-      defaultCost: [0]
+      defaultPrice: [],
+      defaultCost: []
     });
     const requestBody = {
       "pageNo": 0,
@@ -48,7 +51,6 @@ export class ListItemsComponent {
     }
     this.categoryService.getCategories(requestBody).subscribe(response=>{
       this.allCategories = response['items'];
-      console.log("item list: " + JSON.stringify(response, null, 2));
     });
   }
 
@@ -114,9 +116,13 @@ export class ListItemsComponent {
   handleCancel(){
     this.isVisible = false;
     this.isVisibleCreate = false;
+    this.isVisibleDetails = false;
     this.cleanForm();
   }
 
+  handleOk(): void {
+    this.isVisibleDetails = false;
+  }
   editItem(id: string){
     this.itemService.getItemsById(id).subscribe(response=>{
       let selectedItem = response['data'];
@@ -124,6 +130,20 @@ export class ListItemsComponent {
       this.isVisible = true;
     });
     this.cleanForm();
+  }
+
+  getItemDetails(id: string){
+    this.itemService.getItemsById(id).subscribe(response=>{
+      if(response['success'] == true){
+        this.itemDetails = response['data'];
+        this.isVisibleDetails = true;
+      }else{
+        this.modal.error({
+          nzTitle: 'Details error',
+          nzContent: `${response['message']}`
+        });
+      }
+    });
   }
 
   updateItem(){
@@ -153,33 +173,40 @@ export class ListItemsComponent {
 
   createItem(){
     const item = this.itemForm.value;
-    const body = {
-      code: item.code,
-      name: item.name,
-      description: item.description,
-      defaultPrice: item.defaultPrice,
-      defaultCost: item.defaultCost,
-      categoryId: this.selectedCategory
+    if(this.selectedCategory===undefined){
+      this.modal.warning({
+        nzTitle: 'Warning',
+        nzContent: 'Please choose a category for the item'
+      });
+    }else{
+      const body = {
+        code: item.code,
+        name: item.name,
+        description: item.description,
+        defaultPrice: item.defaultPrice,
+        defaultCost: item.defaultCost,
+        categoryId: this.selectedCategory
+      }
+      this.itemService.createItem(body).subscribe(response=>{
+        if(response['success'] == true){
+          this.fetchData();
+          this.isVisibleCreate = false;
+          this.cleanForm();
+          this.modal.success({
+            nzTitle: 'Item successfully created'
+          })
+          this.cleanForm();
+        }
+        else{
+          this.modal.error({
+            nzTitle: 'Create error',
+            nzContent: `${response['message']}`
+          });
+          this.isVisibleCreate = false;
+          this.cleanForm();
+        }
+      });
     }
-    this.itemService.createItem(body).subscribe(response=>{
-      if(response['success'] == true){
-        this.fetchData();
-        this.isVisibleCreate = false;
-        this.cleanForm();
-        this.modal.success({
-          nzTitle: 'Item successfully created'
-        })
-        this.cleanForm();
-      }
-      else{
-        this.modal.error({
-          nzTitle: 'Create error',
-          nzContent: `${response['message']}`
-        });
-        this.isVisibleCreate = false;
-        this.cleanForm();
-      }
-    });
   }
 
   onSelectionChange(){
@@ -198,8 +225,8 @@ export class ListItemsComponent {
       code: ['', Validators.required],
       name: ['', Validators.required],
       description: [''],
-      defaultPrice: [0],
-      defaultCost: [0]
+      defaultPrice: [],
+      defaultCost: []
     });
   }
 }

@@ -41,8 +41,8 @@
         <nz-form-item>
           <textarea nz-input rows="4" type="text" formControlName="description"></textarea>
         </nz-form-item>
-        <button nz-button nzType="primary" [disabled]="categoryForm.invalid" (click)="updateCategory()">Actualizar</button>
-        <button class="cancel-button" nz-button nzType="default" (click)="handleCancel()">Cancelar</button>
+        <button nz-button nzType="primary" [disabled]="categoryForm.invalid" (click)="updateCategory()">Edit</button>
+        <button class="cancel-button" nz-button nzType="default" (click)="handleCancel()">Cancel</button>
       </form>
     </ng-container>
   </nz-modal>
@@ -52,13 +52,13 @@
       <form [formGroup]="categoryForm">
         <input type="hidden" formControlName="id">
         <nz-form-item>
-          <input nz-input type="text" formControlName="name">
+          <input placeholder="Name" nz-input type="text" formControlName="name">
         </nz-form-item>
         <nz-form-item>
-          <textarea nz-input rows="4" type="text" formControlName="description"></textarea>
+          <textarea placeholder="Description" nz-input rows="4" type="text" formControlName="description"></textarea>
         </nz-form-item>
         <button nz-button nzType="primary" [disabled]="categoryForm.invalid" (click)="createCategory()">Create</button>
-        <button class="cancel-button" nz-button nzType="default" (click)="handleCancel()">Cancelar</button>
+        <button class="cancel-button" nz-button nzType="default" (click)="handleCancel()">Cancel</button>
       </form>
     </ng-container>
   </nz-modal>
